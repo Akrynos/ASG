@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<GridPane alignment="center" hgap="10" prefHeight="424.0" prefWidth="608.0" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <HBox prefHeight="458.0" prefWidth="594.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <children>
+            <AnchorPane prefHeight="404.0" prefWidth="286.0">
+               <children>
+                  <GridPane layoutX="17.0" layoutY="29.0" prefHeight="346.0" prefWidth="252.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="155.0" minWidth="10.0" prefWidth="131.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="121.0" minWidth="10.0" prefWidth="121.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Generate" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Label text="Feedback Type" />
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                           <children>
+                              <ChoiceBox layoutY="17.0" prefHeight="25.0" prefWidth="121.0" />
+                           </children>
+                        </AnchorPane>
+                        <Label layoutX="10.0" layoutY="17.0" text="LFSR2: Number of bits " GridPane.rowIndex="2" />
+                        <Label layoutX="10.0" layoutY="17.0" prefHeight="17.0" prefWidth="123.0" text="LFSR1: Number of bits " GridPane.rowIndex="1" />
+                        <Label layoutX="10.0" layoutY="77.0" text="LFSR3: Number of bits " GridPane.rowIndex="3" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
+                           <children>
+                              <Label layoutX="52.0" layoutY="6.0" text="TIPS" />
+                              <Label layoutX="5.0" layoutY="29.0" prefHeight="17.0" prefWidth="121.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <children>
+                              <Label layoutX="14.0" layoutY="29.0" text="Label" />
+                              <Label layoutX="14.0" layoutY="6.0" text="Sequence" />
+                           </children>
+                        </AnchorPane>
+                        <Separator prefWidth="200.0" GridPane.rowIndex="4" />
+                        <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+            <TabPane prefHeight="404.0" prefWidth="310.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="LFSR1">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="285.0" />
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="LFSR2">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="285.0" />
+                           </children></AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="LFSR3">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="285.0" />
+                           </children></AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Result">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextArea layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="285.0" />
+                           </children></AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </HBox>
+   </children>
+</GridPane>
