@@ -25,36 +25,18 @@ public class LFSR {
         SeqLength = -1;
         setFeedbackType(Feedback);
         setExtended(isExtended);
+        //System.out.println("Constructor: " + NumberOfBits);
         if (!setNumberOfBits(NumberOfBits) || !setTaps(Taps))
             throw new IllegalArgumentException("Failed to initialize an LFSR class.");
         resetTimeOutFlag();
         resetLFSR();
     }
-
-    public LFSR() {
-        this(4, new int[0], FeedbackType.MANY2ONE, false);
-    }
-
-    public LFSR(int NumberOfBits, int[] Taps) {
-        this(NumberOfBits, Taps, FeedbackType.MANY2ONE, false);
-    }
-
     public LFSR(int NumberOfBits, int[] Taps, FeedbackType Feedback) {
         this(NumberOfBits, Taps, Feedback, false);
     }
-
-    public LFSR(int NumberOfBits, FeedbackType Feedback, boolean isExtended) {
-        this(NumberOfBits, new int[0], Feedback, isExtended);
-    }
-
     public LFSR(int NumberOfBits, FeedbackType Feedback) {
         this(NumberOfBits, new int[0], Feedback, false);
     }
-
-    public LFSR(int NumberOfBits) {
-        this(NumberOfBits, new int[0], FeedbackType.MANY2ONE, false);
-    }
-
     public final void setFeedbackType(FeedbackType val) {
         Feedback = val;
     }
@@ -73,6 +55,7 @@ public class LFSR {
             return false;
         boolean initialValue = true;
         NumberOfBits = val;
+        //System.out.println(NumberOfBits);
         Bits = new boolean[NumberOfBits + 1];
         for (int i = 0; i < NumberOfBits; i++)
             Bits[i] = initialValue;
@@ -255,8 +238,11 @@ public class LFSR {
         }
         StringBuilder text = new StringBuilder();
         for (int i = start; i <= stop; i++) {
-            text.append(i)
-                    .append("\t");
+            text.append(i);
+                    if(stop > 10000){
+                        text.append("\t \t");
+                    } else  text.append("\t");
+
             if (bitDirection)
                 text.append(getBitsForward());
             else

@@ -1,122 +1,156 @@
 package sample;
 
-public class Controller {
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
 
-//    LFSR lfsr = new LFSR();
-//    private void BitsTextAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BitsTextAreaActionPerformed
-//        try {
-//            lfsr.setNumberOfBits(Integer.parseInt(BitsTextArea.getText()));
-//        }
-//        catch (NumberFormatException f) {
-//            lfsr.setNumberOfBits(1);
-//        }
-//        UpdateTapsList();
-//        UpdateSeqLength();
-//    }//GEN-LAST:event_BitsTextAreaActionPerformed
-//
-//    //**********************************************
-//    //Update Functions
-//    //**********************************************
-//
-//    private void UpdateTapsList() {
-//        lfsr.resetTimeOutFlag();
-//        javax.swing.DefaultListModel model = new javax.swing.DefaultListModel();
-//        if (AutoRadio.isSelected())
-//            lfsr.setTaps(lfsr.getOptimizedTaps());
-//        else {
-//            int[] adjArray = TapsList.getSelectedIndices();
-//            for(int i = 0; i < adjArray.length; i++)
-//                adjArray[i] = adjArray[i] + 1;
-//            lfsr.setTaps(adjArray);
-//        }
-//        for(int i = 1; i <= lfsr.getNumberOfBits(); i++)
-//            model.addElement(i);
-//        TapsList.clearSelection();
-//        TapsList.setModel(model);
-//        int[] adjArray = lfsr.getTaps().clone();
-//        for(int i = 0; i < adjArray.length; i++)
-//            adjArray[i] = adjArray[i] - 1;
-//        TapsList.setSelectedIndices(adjArray);
-//    }
-//
-//    private void UpdateSeqList() {
-//        SeqTextArea.setText("");
-//        lfsr.resetTimeOutFlag();
-//        int start, stop;
-//        if (FullSeqCheckBox.isSelected()) {
-//            start = 0;
-//            stop = lfsr.getSequenceLength();
-//        } else {
-//            start = getStart();
-//            stop = getStop();
-//        }
-//        SeqTextArea.append(lfsr.getBitSequence(start, stop, BitForward.isSelected()));
-//        if (lfsr.getTimeOutFlag())
-//            SeqTextArea.append("***Timeout Warning Occured***");
-//        SeqTextArea.setCaretPosition(0);
-//        lfsr.resetLFSR();
-//    }
-//
-//    private void UpdateLFSRSettings() {
-//        if (XorRadio.isSelected())
-//            lfsr.setGateType(GateType.XOR);
-//        else
-//            lfsr.setGateType(GateType.XNOR);
-//        if (ManyToOneRadio.isSelected())
-//            lfsr.setFeedbackType(FeedbackType.MANY2ONE);
-//        else
-//            lfsr.setFeedbackType(FeedbackType.ONE2MANY);
-//        if (nRadioButton.isSelected())
-//            lfsr.setExtended(true);
-//        else
-//            lfsr.setExtended(false);
-//        try {lfsr.setNumberOfBits(Integer.parseInt(BitsTextArea.getText()));}
-//        catch (NumberFormatException e) { lfsr.setNumberOfBits(1);}
-//        lfsr.resetLFSR();
-//    }
-//
-//    private void UpdateCode() {
-//        boolean IncludeReset = false;
-//        boolean IncludeFlag = false;
-//        if (IncludeResetCheckBox.isSelected())
-//            IncludeReset = true;
-//        if (IncludeFlagCheckBox.isSelected())
-//            IncludeFlag = true;
-//
-//    }
-//
-//    private void UpdateSeqLength() {
-//        lfsr.getSequenceLength();
-//        if (lfsr.getTimeOutFlag())
-//            SeqLengthTextArea.setText("Time Out");
-//        else
-//            SeqLengthTextArea.setText(Integer.toString(lfsr.getSequenceLength()));
-//    }
-//
-//    //**********************************************
-//    //Get Functions
-//    //**********************************************
-//
-//    private int getStop() {
-//        int stop;
-//        try {
-//            stop = Integer.parseInt(UpperTextArea.getText());
-//            if (stop>lfsr.getSequenceLength()-1)
-//                stop = lfsr.getSequenceLength()-1;
-//        }
-//        catch (NumberFormatException e) { stop = lfsr.getSequenceLength()-1; }
-//        return stop;
-//    }
-//
-//    private int getStart() {
-//        int start;
-//        try {
-//            start = Integer.parseInt(LowerTextArea.getText());
-//            if (start<1)
-//                start = 0;
-//        }
-//        catch (NumberFormatException e) { start = 0; }
-//        return start;
-//    }
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class Controller implements Initializable {
+
+    @FXML
+    private ChoiceBox feedbackType;
+    @FXML
+    private TextField tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsr1, bytesLfsr2, bytesLfsr3, upper, lower;
+    @FXML
+    private CheckBox autoTaps, ifFile, FullSeq;
+    @FXML
+    private Label time, seqLength;
+    @FXML
+    private TextArea lfsr1Res, lfsr2Res, lfsr3Res, result;
+    private LFSR lfsr1, lfsr2, lfsr3;
+    private int[] tap0, tap1, tap2;
+    String fileName;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void Generate() {
+        if (!autoTaps.isSelected()) {
+            tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap20.getText()), Integer.parseInt(tap30.getText()), Integer.parseInt(tap40.getText())};
+            tap1 = new int[]{Integer.parseInt(tap11.getText()), Integer.parseInt(tap21.getText()), Integer.parseInt(tap31.getText()), Integer.parseInt(tap41.getText())};
+            tap2 = new int[]{Integer.parseInt(tap12.getText()), Integer.parseInt(tap22.getText()), Integer.parseInt(tap32.getText()), Integer.parseInt(tap42.getText())};
+        }
+        if (ifFile.isSelected()) {
+            fileName = writeFile.getText();
+        }
+        int[] bytes = new int[]{Integer.parseInt(bytesLfsr1.getText()), Integer.parseInt(bytesLfsr2.getText()), Integer.parseInt(bytesLfsr3.getText())};
+        System.out.println(bytes[0] + " " + bytes[1] + " " + bytes[2]);
+        for (int i = 0; i < 3; i++) {
+            if (bytes[i] <= 0 && bytes[i] > 100) {
+                bytes[i] = 8;
+            }
+        }
+        String feedBack = (String) feedbackType.getValue();
+
+        if (feedBack != "OneToMany" || feedBack != "ManyToOne") feedBack = "OneToMany";
+        switch (feedBack) {
+            case "OneToMany":
+                if (autoTaps.isSelected()) {
+                    lfsr1 = new LFSR(bytes[0], FeedbackType.ONE2MANY);
+                    lfsr2 = new LFSR(bytes[1], FeedbackType.ONE2MANY);
+                    lfsr3 = new LFSR(bytes[2], FeedbackType.ONE2MANY);
+                } else {
+                    lfsr1 = new LFSR(bytes[0], tap0, FeedbackType.ONE2MANY);
+                    lfsr2 = new LFSR(bytes[1], tap1, FeedbackType.ONE2MANY);
+                    lfsr3 = new LFSR(bytes[2], tap2, FeedbackType.ONE2MANY);
+                }
+                break;
+            case "ManyToOne":
+                if (autoTaps.isSelected()) {
+                    lfsr1 = new LFSR(bytes[0], FeedbackType.MANY2ONE);
+                    lfsr2 = new LFSR(bytes[1], FeedbackType.MANY2ONE);
+                    lfsr3 = new LFSR(bytes[2], FeedbackType.MANY2ONE);
+                } else {
+                    lfsr1 = new LFSR(bytes[0], tap0, FeedbackType.MANY2ONE);
+                    lfsr2 = new LFSR(bytes[1], tap1, FeedbackType.MANY2ONE);
+                    lfsr3 = new LFSR(bytes[2], tap2, FeedbackType.MANY2ONE);
+                }
+                break;
+        }
+        long generationTime = System.currentTimeMillis();
+        UpdateTapsList();
+        UpdateSeqLength();
+        UpdateSeqList();
+        time.setText(Long.toString(System.currentTimeMillis() - generationTime));
+    }
+
+    //**********************************************
+    //Update Functions
+    //**********************************************
+
+    private void UpdateTapsList() {
+        TextField[] taps = new TextField[]{tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42};
+        lfsr1.resetTimeOutFlag();
+        lfsr2.resetTimeOutFlag();
+        lfsr3.resetTimeOutFlag();
+        tap0 = lfsr1.getTaps();
+        tap1 = lfsr2.getTaps();
+        tap2 = lfsr3.getTaps();
+        for (int i = 0; i < 4; i++) {
+            if (tap0.length > i + 1) taps[i].setText(Integer.toString(tap0[i]));
+            if (tap1.length > i + 1) taps[i + 4].setText(Integer.toString(tap1[i]));
+            if (tap2.length > i + 1) taps[i + 8].setText(Integer.toString(tap2[i]));
+        }
+    }
+
+    private void UpdateSeqList() {
+        result.setText("");
+        lfsr1.resetTimeOutFlag();
+        lfsr2.resetTimeOutFlag();
+        lfsr3.resetTimeOutFlag();
+        int start, stop;
+        if (FullSeq.isSelected()) {
+            start = 0;
+            stop = lfsr1.getSequenceLength();
+            System.out.println(stop);
+        } else {
+            start = getStart();
+            stop = getStop();
+        }
+        result.setText(lfsr1.getBitSequence(start, stop, true));
+        if (lfsr1.getTimeOutFlag())
+            result.setText("***Timeout Warning Occured***");
+        lfsr1.resetLFSR();
+    }
+
+    private void UpdateSeqLength() {
+        lfsr1.getSequenceLength();
+        if (lfsr1.getTimeOutFlag())
+            seqLength.setText("Time Out");
+        else
+            seqLength.setText(Integer.toString(lfsr1.getSequenceLength()));
+    }
+
+    //**********************************************
+    //Get Functions
+    //**********************************************
+
+    private int getStop() {
+        int stop;
+        try {
+            stop = Integer.parseInt(upper.getText());
+            if (stop > lfsr1.getSequenceLength() - 1)
+                stop = lfsr1.getSequenceLength() - 1;
+        } catch (NumberFormatException e) {
+            stop = lfsr1.getSequenceLength() - 1;
+        }
+        return stop;
+    }
+
+    private int getStart() {
+        int start;
+        try {
+            start = Integer.parseInt(lower.getText());
+            if (start < 1)
+                start = 0;
+        } catch (NumberFormatException e) {
+            start = 0;
+        }
+        return start;
+    }
 
 }
