@@ -50,24 +50,16 @@ public class Controller implements Initializable {
         switch (feedBack) {
             case "OneToMany":
                 if (autoTaps.isSelected()) {
-                    lfsr1 = new LFSR(bytes[0], FeedbackType.ONE2MANY);
-                    lfsr2 = new LFSR(bytes[1], FeedbackType.ONE2MANY);
-                    lfsr3 = new LFSR(bytes[2], FeedbackType.ONE2MANY);
+                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], FeedbackType.ONE2MANY);
                 } else {
-                    lfsr1 = new LFSR(bytes[0], tap0, FeedbackType.ONE2MANY);
-                    lfsr2 = new LFSR(bytes[1], tap1, FeedbackType.ONE2MANY);
-                    lfsr3 = new LFSR(bytes[2], tap2, FeedbackType.ONE2MANY);
+                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], tap0, tap1, tap2, FeedbackType.ONE2MANY);
                 }
                 break;
             case "ManyToOne":
                 if (autoTaps.isSelected()) {
-                    lfsr1 = new LFSR(bytes[0], FeedbackType.MANY2ONE);
-                    lfsr2 = new LFSR(bytes[1], FeedbackType.MANY2ONE);
-                    lfsr3 = new LFSR(bytes[2], FeedbackType.MANY2ONE);
+                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], FeedbackType.MANY2ONE);
                 } else {
-                    lfsr1 = new LFSR(bytes[0], tap0, FeedbackType.MANY2ONE);
-                    lfsr2 = new LFSR(bytes[1], tap1, FeedbackType.MANY2ONE);
-                    lfsr3 = new LFSR(bytes[2], tap2, FeedbackType.MANY2ONE);
+                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], tap0, tap1, tap2, FeedbackType.MANY2ONE);
                 }
                 break;
         }

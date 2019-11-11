@@ -1,11 +1,10 @@
 package sample;
 
-public class LFSR {
+public class subLFSR {
     private int NumberOfBits;
     private int[] Taps;
     private boolean[] Bits;
 
-    subLFSR sub0, sub1;
     private FeedbackType Feedback = FeedbackType.ONE2MANY;
     private int SeqLength = -1;
     private boolean Extended = false;
@@ -17,14 +16,12 @@ public class LFSR {
     private boolean[] StrobeBitClone;
     private boolean StrobeExtendedRestoreFlag;
     private boolean StrobeExtendedOnceFlag;
-   //**************************************************************************
+
+    //**************************************************************************
     //Constructors
     //**************************************************************************
-
-    public LFSR(int NumberOfBits, int NumberOfBitsSub1, int NumberOfBitsSub0, int[] Taps, int[] Taps0, int[] Taps1, FeedbackType Feedback, boolean isExtended) {
+    public subLFSR(int NumberOfBits, int[] Taps, FeedbackType Feedback, boolean isExtended) {
         SeqLength = -1;
-        sub0 = new subLFSR(NumberOfBitsSub0, Taps0, Feedback, false);
-        sub1 = new subLFSR(NumberOfBitsSub1, Taps1, Feedback, false);
         setFeedbackType(Feedback);
         setExtended(isExtended);
         //System.out.println("Constructor: " + NumberOfBits);
@@ -33,15 +30,7 @@ public class LFSR {
         resetTimeOutFlag();
         resetLFSR();
     }
-    public LFSR(int NumberOfBits, int NumberOfBitsSub1, int NumberOfBitsSub0, int[] Taps, int[] Taps0, int[] Taps1, FeedbackType Feedback) {
-        this(NumberOfBits, NumberOfBitsSub1, NumberOfBitsSub0, Taps, Taps1, Taps0, Feedback, false);
-    }
-    public LFSR(int NumberOfBits, FeedbackType Feedback) {
-        this(NumberOfBits, 4, 6, new int[0], new int[0], new int[0], Feedback, false);
-    }
-    public LFSR (int NumberOfBits, int NumberOfBitsSub1, int NumberOfBitsSub0, FeedbackType Feedback){
-        this(NumberOfBits, NumberOfBitsSub1, NumberOfBitsSub0, new int[0], new int[0], new int[0],Feedback, false);
-    }
+
     public final void setFeedbackType(FeedbackType val) {
         Feedback = val;
     }
@@ -234,30 +223,15 @@ public class LFSR {
      * sequence delimited by the system line separator. The sequences can be
      * displayed forward or backward. The method can cause a timeout flag.
      */
-    public String getBitSequence(int start, int stop, boolean bitDirection) {
+    public String getBitSequence(boolean bitDirection) {
         initTimeOut(ACCEPTABLE_RUN_TIME);
-        for (int i = 0; i < start; i++) {
-            strobeClock();
-            if (isTimeOut())
-                return "timeout";
-        }
-        StringBuilder text = new StringBuilder();
-        for (int i = start; i <= stop; i++) {
-            text.append(i);
-                    if(stop > 10000){
-                        text.append("\t \t");
-                    } else  text.append("\t");
-
+        String bitSequence = new String();
             if (bitDirection)
-                text.append(getBitsForward());
+                bitSequence = getBitsForward();
             else
-                text.append(getBitsBackward());
-            text.append(System.getProperty("line.separator"));
+                bitSequence = getBitsBackward();
             strobeClock();
-            if (isTimeOut())
-                break;
-        }
-        return text.toString();
+        return bitSequence;
     }
 
     //**************************************************************************
@@ -281,7 +255,7 @@ public class LFSR {
         return false;
     }
 
-    private void  strobeClockXORO2M() {
+    private void strobeClockXORO2M() {
         boolean[] BitsClone = Bits.clone();
         int j = 0;
         Bits[0] = BitsClone[NumberOfBits - 1];
@@ -324,7 +298,6 @@ public class LFSR {
     }
 
     /**
-     *
      * strobeClock
      * strobes the clock once. Advances the LFSR given its current settings.
      * The results can be observed with a display function.
@@ -431,3 +404,4 @@ public class LFSR {
     }
 
 }
+
