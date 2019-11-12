@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -23,6 +26,8 @@ public class Controller implements Initializable {
     private LFSR lfsr;
     private int[] tap0, tap1, tap2;
     String fileName;
+    File file;
+    FileWriter fw;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -71,14 +76,11 @@ public class Controller implements Initializable {
         int[] a = new int[]{};
         if (!tap10.getText().isEmpty()) {
             //System.out.println("Not empty: " + tap10.getText());
-            if (!tap20.getText().isEmpty())
-            {
+            if (!tap20.getText().isEmpty()) {
                 //System.out.println("Not empty: " + tap20.getText());
-                if (!tap30.getText().isEmpty())
-                {
+                if (!tap30.getText().isEmpty()) {
                     //System.out.println("Not empty: " + tap30.getText());
-                    if (!tap40.getText().isEmpty())
-                    {
+                    if (!tap40.getText().isEmpty()) {
                         //System.out.println("Not empty: " + tap40.getText());
                         tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap20.getText()), Integer.parseInt(tap30.getText()), Integer.parseInt(tap40.getText())};
                     } else {
@@ -129,7 +131,7 @@ public class Controller implements Initializable {
     private void UpdateTapsList() {
         TextField[] taps = new TextField[]{tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42};
         lfsr.resetTimeOutFlag();
-        if (!autoTaps.isSelected()){
+        if (!autoTaps.isSelected()) {
             lfsr.setTaps(tap0);
             lfsr.setTaps0(tap1);
             lfsr.setTaps1(tap2);
@@ -175,6 +177,23 @@ public class Controller implements Initializable {
         lfsr1Res.setText(lfsr.getSubLFSR1());
         result.setText(lfsr.getResult());
         seqLength.setText(Integer.toString(lfsr.getResult().length()));
+        if (ifFile.isSelected()) {
+            file = new File(writeFile.getText());
+            fw = null;
+            try {
+                fw = new FileWriter(file);
+                fw.write(lfsr.getResult());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                //close resources
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         if (lfsr.getTimeOutFlag())
             result.setText("***Timeout Warning Occured***");
         lfsr.resetLFSR();

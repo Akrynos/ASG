@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ASG:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ASG_jar</output-path>
+    <root id="archive" name="ASG.jar">
+      <element id="module-output" name="ASG" />
+    </root>
+  </artifact>
+</component>

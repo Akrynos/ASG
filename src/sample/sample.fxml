@@ -68,8 +68,8 @@
                               </ChoiceBox>
                            </children>
                         </AnchorPane>
-                        <Label layoutX="10.0" layoutY="17.0" text="LFSR0: Number of bits " wrapText="true" GridPane.rowIndex="2" />
                         <Label layoutX="10.0" layoutY="17.0" text="Main LFSR: Number of bits " wrapText="true" GridPane.rowIndex="1" />
+                         <Label layoutX="10.0" layoutY="17.0" text="LFSR0: Number of bits " wrapText="true" GridPane.rowIndex="2" />
                         <Label layoutX="10.0" layoutY="77.0" text="LFSR1: Number of bits " wrapText="true" GridPane.rowIndex="3" />
                         <TextField fx:id="bytesLfsrMain" text="12" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <TextField fx:id="bytesLfsr0" text="6" GridPane.columnIndex="1" GridPane.rowIndex="2" />
