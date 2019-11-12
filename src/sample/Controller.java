@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -12,14 +13,14 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox feedbackType;
     @FXML
-    private TextField tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsr1, bytesLfsr2, bytesLfsr3, upper, lower;
+    private TextField tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsrMain, bytesLfsr0, bytesLfsr1, upper, lower;
     @FXML
     private CheckBox autoTaps, ifFile, FullSeq;
     @FXML
     private Label time, seqLength;
     @FXML
-    private TextArea lfsr1Res, lfsr2Res, lfsr3Res, result;
-    private LFSR lfsr1, lfsr2, lfsr3;
+    private TextArea lfsr1Res, lfsr0Res, lfsrRes, result;
+    private LFSR lfsr;
     private int[] tap0, tap1, tap2;
     String fileName;
 
@@ -30,14 +31,12 @@ public class Controller implements Initializable {
 
     public void Generate() {
         if (!autoTaps.isSelected()) {
-            tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap20.getText()), Integer.parseInt(tap30.getText()), Integer.parseInt(tap40.getText())};
-            tap1 = new int[]{Integer.parseInt(tap11.getText()), Integer.parseInt(tap21.getText()), Integer.parseInt(tap31.getText()), Integer.parseInt(tap41.getText())};
-            tap2 = new int[]{Integer.parseInt(tap12.getText()), Integer.parseInt(tap22.getText()), Integer.parseInt(tap32.getText()), Integer.parseInt(tap42.getText())};
+            getTaps();
         }
         if (ifFile.isSelected()) {
             fileName = writeFile.getText();
         }
-        int[] bytes = new int[]{Integer.parseInt(bytesLfsr1.getText()), Integer.parseInt(bytesLfsr2.getText()), Integer.parseInt(bytesLfsr3.getText())};
+        int[] bytes = new int[]{Integer.parseInt(bytesLfsrMain.getText()), Integer.parseInt(bytesLfsr0.getText()), Integer.parseInt(bytesLfsr1.getText())};
         System.out.println(bytes[0] + " " + bytes[1] + " " + bytes[2]);
         for (int i = 0; i < 3; i++) {
             if (bytes[i] <= 0 && bytes[i] > 100) {
@@ -45,21 +44,19 @@ public class Controller implements Initializable {
             }
         }
         String feedBack = (String) feedbackType.getValue();
-
-        if (feedBack != "OneToMany" || feedBack != "ManyToOne") feedBack = "OneToMany";
         switch (feedBack) {
             case "OneToMany":
                 if (autoTaps.isSelected()) {
-                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], FeedbackType.ONE2MANY);
+                    lfsr = new LFSR(bytes[0], bytes[1], bytes[2], FeedbackType.ONE2MANY);
                 } else {
-                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], tap0, tap1, tap2, FeedbackType.ONE2MANY);
+                    lfsr = new LFSR(bytes[0], bytes[1], bytes[2], tap0, tap1, tap2, FeedbackType.ONE2MANY);
                 }
                 break;
             case "ManyToOne":
                 if (autoTaps.isSelected()) {
-                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], FeedbackType.MANY2ONE);
+                    lfsr = new LFSR(bytes[0], bytes[1], bytes[2], FeedbackType.MANY2ONE);
                 } else {
-                    lfsr1 = new LFSR(bytes[0], bytes[1], bytes[2], tap0, tap1, tap2, FeedbackType.MANY2ONE);
+                    lfsr = new LFSR(bytes[0], bytes[1], bytes[2], tap0, tap1, tap2, FeedbackType.MANY2ONE);
                 }
                 break;
         }
@@ -70,51 +67,125 @@ public class Controller implements Initializable {
         time.setText(Long.toString(System.currentTimeMillis() - generationTime));
     }
 
+    private void getTaps() {
+        int[] a = new int[]{};
+        if (!tap10.getText().isEmpty()) {
+            //System.out.println("Not empty: " + tap10.getText());
+            if (!tap20.getText().isEmpty())
+            {
+                //System.out.println("Not empty: " + tap20.getText());
+                if (!tap30.getText().isEmpty())
+                {
+                    //System.out.println("Not empty: " + tap30.getText());
+                    if (!tap40.getText().isEmpty())
+                    {
+                        //System.out.println("Not empty: " + tap40.getText());
+                        tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap20.getText()), Integer.parseInt(tap30.getText()), Integer.parseInt(tap40.getText())};
+                    } else {
+                        //System.out.println("Three");
+                        tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap20.getText())};
+                    }
+                } else {
+                    //System.out.println("Two");
+                    tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap20.getText())};
+                }
+            } else {
+                //System.out.println("One");
+                tap0 = new int[]{Integer.parseInt(tap10.getText()), Integer.parseInt(tap10.getText()) + 1};
+            }
+        } else {
+            tap0 = new int[0];
+        }
+        if (!tap11.getText().isEmpty()) {
+            if (!tap21.getText().isEmpty()) {
+                if (!tap31.getText().isEmpty()) {
+                    if (!tap41.getText().isEmpty()) {
+                        tap1 = new int[]{Integer.getInteger(tap11.getText()), Integer.parseInt(tap21.getText()), Integer.parseInt(tap31.getText()), Integer.parseInt(tap41.getText())};
+                    } else
+                        tap1 = new int[]{Integer.parseInt(tap11.getText()), Integer.parseInt(tap21.getText())};
+                } else tap1 = new int[]{Integer.parseInt(tap11.getText()), Integer.parseInt(tap21.getText())};
+            } else tap1 = new int[]{Integer.parseInt(tap11.getText()), Integer.parseInt(tap11.getText()) + 1};
+        } else {
+            tap1 = new int[0];
+        }
+        if (!tap12.getText().isEmpty()) {
+            if (!tap22.getText().isEmpty()) {
+                if (!tap32.getText().isEmpty()) {
+                    if (!tap42.getText().isEmpty()) {
+                        tap2 = new int[]{Integer.parseInt(tap12.getText()), Integer.parseInt(tap22.getText()), Integer.parseInt(tap32.getText()), Integer.parseInt(tap42.getText())};
+                    } else
+                        tap2 = new int[]{Integer.parseInt(tap12.getText()), Integer.parseInt(tap22.getText())};
+                } else tap2 = new int[]{Integer.parseInt(tap12.getText()), Integer.parseInt(tap22.getText())};
+            } else tap2 = new int[]{Integer.parseInt(tap12.getText()), Integer.parseInt(tap12.getText()) + 1};
+        } else {
+            tap2 = new int[0];
+        }
+    }
+
     //**********************************************
     //Update Functions
     //**********************************************
 
     private void UpdateTapsList() {
         TextField[] taps = new TextField[]{tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42};
-        lfsr1.resetTimeOutFlag();
-        lfsr2.resetTimeOutFlag();
-        lfsr3.resetTimeOutFlag();
-        tap0 = lfsr1.getTaps();
-        tap1 = lfsr2.getTaps();
-        tap2 = lfsr3.getTaps();
+        lfsr.resetTimeOutFlag();
+        if (!autoTaps.isSelected()){
+            lfsr.setTaps(tap0);
+            lfsr.setTaps0(tap1);
+            lfsr.setTaps1(tap2);
+        }
+        tap0 = lfsr.getTaps();
+//        for (int i = 0; i < tap0.length; i++) {
+//            System.out.println("T: " + tap0[i]);
+//        }
+        tap1 = lfsr.getTaps0();
+//        for (int i = 0; i < tap1.length; i++) {
+//            System.out.println("T0: " + tap1[i]);
+//        }
+
+        tap2 = lfsr.getTaps1();
+//        for (int i = 0; i < tap2.length; i++) {
+//            System.out.println("T1: " + tap2[i]);
+//        }
+
         for (int i = 0; i < 4; i++) {
-            if (tap0.length > i + 1) taps[i].setText(Integer.toString(tap0[i]));
-            if (tap1.length > i + 1) taps[i + 4].setText(Integer.toString(tap1[i]));
-            if (tap2.length > i + 1) taps[i + 8].setText(Integer.toString(tap2[i]));
+            if (tap0.length > i) taps[i].setText(Integer.toString(tap0[i]));
+            if (tap1.length > i) taps[i + 4].setText(Integer.toString(tap1[i]));
+            if (tap2.length > i) taps[i + 8].setText(Integer.toString(tap2[i]));
         }
     }
 
     private void UpdateSeqList() {
+        lfsr1Res.setText("");
+        lfsrRes.setText("");
+        lfsr0Res.setText("");
         result.setText("");
-        lfsr1.resetTimeOutFlag();
-        lfsr2.resetTimeOutFlag();
-        lfsr3.resetTimeOutFlag();
+        lfsr.resetTimeOutFlag();
         int start, stop;
         if (FullSeq.isSelected()) {
             start = 0;
-            stop = lfsr1.getSequenceLength();
+            stop = lfsr.getSequenceLength();
             System.out.println(stop);
         } else {
             start = getStart();
             stop = getStop();
         }
-        result.setText(lfsr1.getBitSequence(start, stop, true));
-        if (lfsr1.getTimeOutFlag())
+        lfsrRes.setText(lfsr.getBitSequence(start, stop, true));
+        lfsr0Res.setText(lfsr.getSubLFSR0());
+        lfsr1Res.setText(lfsr.getSubLFSR1());
+        result.setText(lfsr.getResult());
+        seqLength.setText(Integer.toString(lfsr.getResult().length()));
+        if (lfsr.getTimeOutFlag())
             result.setText("***Timeout Warning Occured***");
-        lfsr1.resetLFSR();
+        lfsr.resetLFSR();
     }
 
     private void UpdateSeqLength() {
-        lfsr1.getSequenceLength();
-        if (lfsr1.getTimeOutFlag())
+        lfsr.getSequenceLength();
+        if (lfsr.getTimeOutFlag())
             seqLength.setText("Time Out");
         else
-            seqLength.setText(Integer.toString(lfsr1.getSequenceLength()));
+            seqLength.setText(Integer.toString(lfsr.getSequenceLength()));
     }
 
     //**********************************************
@@ -125,10 +196,10 @@ public class Controller implements Initializable {
         int stop;
         try {
             stop = Integer.parseInt(upper.getText());
-            if (stop > lfsr1.getSequenceLength() - 1)
-                stop = lfsr1.getSequenceLength() - 1;
+            if (stop > lfsr.getSequenceLength() - 1)
+                stop = lfsr.getSequenceLength() - 1;
         } catch (NumberFormatException e) {
-            stop = lfsr1.getSequenceLength() - 1;
+            stop = lfsr.getSequenceLength() - 1;
         }
         return stop;
     }

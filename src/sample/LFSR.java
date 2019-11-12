@@ -1,15 +1,17 @@
 package sample;
 
+import java.util.ArrayList;
+
 public class LFSR {
     private int NumberOfBits;
     private int[] Taps;
     private boolean[] Bits;
-
+    private String subLFSR0, subLFSR1;
     subLFSR sub0, sub1;
     private FeedbackType Feedback = FeedbackType.ONE2MANY;
     private int SeqLength = -1;
     private boolean Extended = false;
-
+    private StringBuilder text, sLFSR0, sLFSR1, result;
     private static final int ACCEPTABLE_RUN_TIME = 5000;
     private long TimeOut;
     private boolean TimeOutFlag;
@@ -17,7 +19,7 @@ public class LFSR {
     private boolean[] StrobeBitClone;
     private boolean StrobeExtendedRestoreFlag;
     private boolean StrobeExtendedOnceFlag;
-   //**************************************************************************
+    //**************************************************************************
     //Constructors
     //**************************************************************************
 
@@ -25,23 +27,38 @@ public class LFSR {
         SeqLength = -1;
         sub0 = new subLFSR(NumberOfBitsSub0, Taps0, Feedback, false);
         sub1 = new subLFSR(NumberOfBitsSub1, Taps1, Feedback, false);
+        if (Feedback == FeedbackType.MANY2ONE) {
+            subLFSR1 = sub1.getBitsForward();
+            subLFSR0 = sub0.getBitsForward();
+        } else {
+            subLFSR1 = sub1.getBitsBackward();
+            subLFSR0 = sub0.getBitsBackward();
+        }
+        text = new StringBuilder();
+        sLFSR0 = new StringBuilder();
+        sLFSR1 = new StringBuilder();
+        result = new StringBuilder();
         setFeedbackType(Feedback);
         setExtended(isExtended);
-        //System.out.println("Constructor: " + NumberOfBits);
+        System.out.println("Constructor: " + NumberOfBits);
         if (!setNumberOfBits(NumberOfBits) || !setTaps(Taps))
             throw new IllegalArgumentException("Failed to initialize an LFSR class.");
         resetTimeOutFlag();
         resetLFSR();
     }
+
     public LFSR(int NumberOfBits, int NumberOfBitsSub1, int NumberOfBitsSub0, int[] Taps, int[] Taps0, int[] Taps1, FeedbackType Feedback) {
         this(NumberOfBits, NumberOfBitsSub1, NumberOfBitsSub0, Taps, Taps1, Taps0, Feedback, false);
     }
+
     public LFSR(int NumberOfBits, FeedbackType Feedback) {
         this(NumberOfBits, 4, 6, new int[0], new int[0], new int[0], Feedback, false);
     }
-    public LFSR (int NumberOfBits, int NumberOfBitsSub1, int NumberOfBitsSub0, FeedbackType Feedback){
-        this(NumberOfBits, NumberOfBitsSub1, NumberOfBitsSub0, new int[0], new int[0], new int[0],Feedback, false);
+
+    public LFSR(int NumberOfBits, int NumberOfBitsSub1, int NumberOfBitsSub0, FeedbackType Feedback) {
+        this(NumberOfBits, NumberOfBitsSub1, NumberOfBitsSub0, new int[0], new int[0], new int[0], Feedback, false);
     }
+
     public final void setFeedbackType(FeedbackType val) {
         Feedback = val;
     }
@@ -81,6 +98,14 @@ public class LFSR {
             return false;
         Taps = NewTaps;
         return true;
+    }
+
+    public void setTaps0(int[] a) {
+        sub0.setTaps(a);
+    }
+
+    public void setTaps1(int[] a) {
+        sub1.setTaps(a);
     }
 
     /**
@@ -158,6 +183,22 @@ public class LFSR {
         return Taps;
     }
 
+    public int[] getTaps1() {
+        return sub1.getTaps();
+    }
+
+    public int[] getTaps0() {
+        return sub0.getTaps();
+    }
+
+    public int[] getOpTaps1() {
+        return sub1.getOptimizedTaps();
+    }
+
+    public int[] getOpTaps0() {
+        return sub0.getOptimizedTaps();
+    }
+
     /**
      * getBitsForward
      * gets a string of "1" and "0" that is th value of the LFSR with the most
@@ -186,6 +227,18 @@ public class LFSR {
             return currentBits;
         else
             return new StringBuilder(currentBits).reverse().toString();
+    }
+
+    public String getSubLFSR0() {
+        return sLFSR0.toString();
+    }
+
+    public String getSubLFSR1() {
+        return sLFSR1.toString();
+    }
+
+    public String getResult() {
+        return result.toString();
     }
 
     /**
@@ -236,23 +289,94 @@ public class LFSR {
      */
     public String getBitSequence(int start, int stop, boolean bitDirection) {
         initTimeOut(ACCEPTABLE_RUN_TIME);
+        String tempResult, correction;
+        correction = new String();
+        int s1=0, s0=0;
+        int subLength, subDiff;
         for (int i = 0; i < start; i++) {
             strobeClock();
             if (isTimeOut())
                 return "timeout";
         }
-        StringBuilder text = new StringBuilder();
-        for (int i = start; i <= stop; i++) {
-            text.append(i);
-                    if(stop > 10000){
-                        text.append("\t \t");
-                    } else  text.append("\t");
 
-            if (bitDirection)
-                text.append(getBitsForward());
-            else
-                text.append(getBitsBackward());
-            text.append(System.getProperty("line.separator"));
+        boolean is0SmallerThan1;
+        if (subLFSR0.length() <= subLFSR1.length()) {
+            subLength = subLFSR0.length();
+            subDiff = subLFSR1.length() - subLFSR0.length();
+            is0SmallerThan1 = true;
+        } else {
+            subLength = subLFSR1.length();
+            subDiff = subLFSR0.length() - subLFSR1.length();
+            is0SmallerThan1 = false;
+        }
+        for (int eee = 0; eee < subDiff; eee++) {
+            correction += "0";
+        }
+
+        for (int i = start; i <= stop; i++) {
+
+            text.append(i);
+            if (i <= 999 && i >= 0) {
+                text.append(" \t ");
+            }if (i > 999) {
+                text.append("\t\t");
+            }
+
+            if (bitDirection) {
+                tempResult = getBitsForward();
+                for (int a = 0; a < tempResult.length(); a++) {
+                    if (tempResult.charAt(a) == '1') {
+                        subLFSR1 = sub1.getBitSequence(true);
+                        sLFSR1.append(++s1 + ". \t" + subLFSR1 + System.getProperty("line.separator"));
+                    } else {
+                        subLFSR0 = sub0.getBitSequence(true);
+                        sLFSR0.append(++s0 + ". \t" + subLFSR0 + System.getProperty("line.separator"));
+                    }
+                    if (subLFSR0.length() != subLFSR1.length()) {
+                        if (is0SmallerThan1) {
+                            subLFSR0 = correction + subLFSR0;
+                            //System.out.println("Corrected LFSR0: " + subLFSR0);
+                        } else {
+                            subLFSR1 = correction + subLFSR1;
+                            //System.out.println("Corrected LFSR1: " + subLFSR1);
+                        }
+                    }
+                    if (subLFSR0.length() == subLFSR1.length()) {
+                        //System.out.println("Length is the same, appending with ^ sign");
+                        for (int b = 0; b < subLength; b++) {
+                            result.append(subLFSR1.charAt(b) ^ subLFSR0.charAt(b));
+                        }
+                    } else System.out.println("Error, data length mismatch");
+                }
+            } else {
+                tempResult = getBitsBackward();
+                for (int a = 0; a < tempResult.length(); a++) {
+                    if (tempResult.charAt(a) == '1') {
+                        subLFSR1 = sub1.getBitSequence(false);
+                        sLFSR1.append(++s1 + ". \t" + subLFSR1 + System.getProperty("line.separator"));
+                    } else {
+                        subLFSR0 = sub0.getBitSequence(false);
+                        sLFSR0.append(++s0 + ". \t" + subLFSR0 + System.getProperty("line.separator"));
+                    }
+                    if (subLFSR0.length() != subLFSR1.length()) {
+                        if (is0SmallerThan1) {
+                            subLFSR0 = correction + subLFSR0;
+                            //System.out.println("Corrected LFSR0: " + subLFSR0);
+                        } else {
+                            subLFSR1 = correction + subLFSR1;
+                            //System.out.println("Corrected LFSR1: " + subLFSR1);
+                        }
+                    }
+                    if (subLFSR0.length() == subLFSR1.length()) {
+                        //System.out.println("Length is the same, appending with ^ sign");
+                        for (int b = 0; b < subLength; b++) {
+                            result.append(subLFSR1.charAt(b) ^ subLFSR0.charAt(b));
+                        }
+                    } else System.out.println("Error, data length mismatch");
+                }
+            }
+            text.append(tempResult)
+                    .append(System.getProperty("line.separator"));
             strobeClock();
             if (isTimeOut())
                 break;
@@ -281,16 +405,20 @@ public class LFSR {
         return false;
     }
 
-    private void  strobeClockXORO2M() {
+    private void strobeClockXORO2M() {
         boolean[] BitsClone = Bits.clone();
         int j = 0;
         Bits[0] = BitsClone[NumberOfBits - 1];
         for (int i = 1; i < NumberOfBits; i++) {
             if ((Taps[j] == i) && (Taps[j] != NumberOfBits)) {
+                //System.out.println("Taps pos: " + j + " " + Taps[j]);
                 Bits[i] = BitsClone[i - 1] ^ BitsClone[NumberOfBits - 1];
                 j++;
-            } else
+            } else {
                 Bits[i] = BitsClone[i - 1];
+                //System.out.println("ELSE");
+            }
+
         }
     }
 
@@ -307,6 +435,7 @@ public class LFSR {
         int j = 0;
         Bits[0] = BitsClone[NumberOfBits - 1];
         for (int i = 1; i < NumberOfBits; i++) {
+
             if ((Taps[j] == i) && (Taps[j] != NumberOfBits)) {
                 Bits[i] = !(BitsClone[i - 1] ^ BitsClone[NumberOfBits - 1]);
                 j++;
@@ -324,7 +453,6 @@ public class LFSR {
     }
 
     /**
-     *
      * strobeClock
      * strobes the clock once. Advances the LFSR given its current settings.
      * The results can be observed with a display function.
