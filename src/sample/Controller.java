@@ -152,8 +152,8 @@ public class Controller implements Initializable {
 
         for (int i = 0; i < 4; i++) {
             if (tap0.length > i) taps[i].setText(Integer.toString(tap0[i]));
-            if (tap1.length > i) taps[i + 4].setText(Integer.toString(tap1[i]));
-            if (tap2.length > i) taps[i + 8].setText(Integer.toString(tap2[i]));
+            if (tap1.length > i) taps[i + 8].setText(Integer.toString(tap1[i]));
+            if (tap2.length > i) taps[i + 4].setText(Integer.toString(tap2[i]));
         }
     }
 
@@ -183,6 +183,7 @@ public class Controller implements Initializable {
             try {
                 fw = new FileWriter(file);
                 fw.write(lfsr.getResult());
+
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
