@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" prefHeight="424.0" prefWidth="608.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="center" hgap="10" prefHeight="424.0" prefWidth="700.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />
@@ -31,7 +31,7 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <HBox prefHeight="458.0" prefWidth="594.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <HBox prefHeight="458.0" prefWidth="699.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <children>
             <AnchorPane prefHeight="404.0" prefWidth="432.0">
                <children>
@@ -71,9 +71,9 @@
                         <Label layoutX="10.0" layoutY="17.0" text="Main LFSR: Number of bits " wrapText="true" GridPane.rowIndex="1" />
                          <Label layoutX="10.0" layoutY="17.0" text="LFSR0: Number of bits " wrapText="true" GridPane.rowIndex="2" />
                         <Label layoutX="10.0" layoutY="77.0" text="LFSR1: Number of bits " wrapText="true" GridPane.rowIndex="3" />
-                        <TextField fx:id="bytesLfsrMain" text="12" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="bytesLfsr0" text="6" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="bytesLfsr1" text="3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="bytesLfsrMain" prefHeight="30.0" text="12" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="bytesLfsr0" prefHeight="30.0" text="6" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="bytesLfsr1" prefHeight="30.0" text="3" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Separator prefWidth="200.0" GridPane.rowIndex="4" />
                         <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                         <Separator prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
@@ -112,18 +112,18 @@
                         <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="2" GridPane.rowIndex="9" />
                         <HBox alignment="CENTER" layoutX="207.0" layoutY="90.0" prefHeight="100.0" prefWidth="200.0" spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
                            <children>
-                              <TextField fx:id="tap11" prefHeight="25.0" prefWidth="25.0" text="1" />
-                              <TextField fx:id="tap21" prefHeight="25.0" prefWidth="25.0" text="2" />
-                              <TextField fx:id="tap31" prefHeight="25.0" prefWidth="25.0" />
-                              <TextField fx:id="tap41" prefHeight="25.0" prefWidth="25.0" />
+                              <TextField fx:id="tap11" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="1" />
+                              <TextField fx:id="tap21" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="2" />
+                              <TextField fx:id="tap31" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" />
+                              <TextField fx:id="tap41" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" layoutX="207.0" layoutY="90.0" prefHeight="100.0" prefWidth="200.0" spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
                            <children>
-                              <TextField fx:id="tap12" prefHeight="25.0" prefWidth="25.0" text="2"/>
-                              <TextField fx:id="tap22" prefHeight="25.0" prefWidth="25.0" text="4"/>
-                              <TextField fx:id="tap32" prefHeight="25.0" prefWidth="25.0" />
-                              <TextField fx:id="tap42" prefHeight="25.0" prefWidth="25.0" />
+                              <TextField fx:id="tap12" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="2" />
+                              <TextField fx:id="tap22" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="4" />
+                              <TextField fx:id="tap32" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" />
+                              <TextField fx:id="tap42" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3">
@@ -143,8 +143,8 @@
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Seq length: " />
-                                    <Label fx:id="seqLength" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" textAlignment="RIGHT" />
+                                    <Label prefHeight="17.0" prefWidth="66.0" text="Length" />
+                                    <TextField fx:id="seqLength" maxWidth="111.0" minWidth="50.0" prefHeight="25.0" prefWidth="107.0" />
                                  </children>
                               </HBox>
                            </children>
@@ -179,10 +179,10 @@
                         <Separator layoutX="193.0" layoutY="301.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="8" />
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="3.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
-                              <TextField fx:id="tap10" prefHeight="25.0" prefWidth="25.0" text="2" />
-                              <TextField fx:id="tap20" prefHeight="25.0" prefWidth="25.0" text="4" />
-                              <TextField fx:id="tap30" prefHeight="25.0" prefWidth="25.0" text="6" />
-                              <TextField fx:id="tap40" prefHeight="25.0" prefWidth="25.0" text="10"/>
+                              <TextField fx:id="tap10" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="2" />
+                              <TextField fx:id="tap20" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="4" />
+                              <TextField fx:id="tap30" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="6" />
+                              <TextField fx:id="tap40" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="10" />
                            </children>
                         </HBox>
                      </children>
@@ -200,7 +200,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea fx:id="lfsrRes" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="213.0" />
+                              <TextArea fx:id="lfsrRes" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="257.0" />
                            </children></AnchorPane>
                   </content>
                 </Tab>
@@ -208,7 +208,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea fx:id="lfsr0Res" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="216.0" />
+                              <TextArea fx:id="lfsr0Res" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="253.0" />
                            </children></AnchorPane>
                   </content>
                 </Tab>
@@ -216,7 +216,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea fx:id="lfsr1Res" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="212.0" />
+                              <TextArea fx:id="lfsr1Res" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="254.0" />
                            </children></AnchorPane>
                      </content>
                   </Tab>
@@ -224,9 +224,42 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TextArea fx:id="result" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="211.0" wrapText="true" />
+                              <TextArea fx:id="result" layoutX="12.0" layoutY="15.0" prefHeight="346.0" prefWidth="256.0" wrapText="true" />
                            </children></AnchorPane>
                      </content>
+                  </Tab>
+                  <Tab text="Program pt.2">
+                      <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <children>
+                                  <GridPane alignment="CENTER" hgap="7.0" layoutX="13.0" layoutY="14.0" minHeight="220.0" minWidth="258.0" prefHeight="220.0" prefWidth="258.0" vgap="10.0">
+                                      <Label alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Key File" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                                      <Label alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Text File" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                      <Label alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Output File" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                      <TextField fx:id="keyFile" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="30.0" prefWidth="30.0" text="key.txt" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                                      <TextField fx:id="textFile" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="30.0" prefWidth="30.0" text="file.txt" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                                      <TextField fx:id="outputFile" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="30.0" prefWidth="30.0" text="output.txt" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                      <CheckBox fx:id="ignore" alignment="CENTER" minHeight="30.0" minWidth="120.0" selected="true" text="Ignore key length" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                                      <Label fx:id="keyError" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="41.0" prefWidth="120.0" text="OK" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                                      <Button fx:id="Cipher" alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Cipher" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" onAction="#Cipher"/>
+                                      <Button fx:id="Decipher" alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Decipher" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" onAction="#Decipher"/>
+                                 <columnConstraints>
+                                    <ColumnConstraints />
+                                    <ColumnConstraints />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                 </rowConstraints>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                  </GridPane>
+                              </children></AnchorPane>
+                      </content>
                   </Tab>
               </tabs>
             </TabPane>

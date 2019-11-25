@@ -4,9 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -16,19 +14,21 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox feedbackType;
     @FXML
-    private TextField tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsrMain, bytesLfsr0, bytesLfsr1, upper, lower;
+    private TextField tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsrMain, bytesLfsr0, bytesLfsr1, upper, lower, seqLength, keyFile, textFile, outputFile;
     @FXML
-    private CheckBox autoTaps, ifFile, FullSeq;
+    private CheckBox autoTaps, ifFile, FullSeq, ignore;
     @FXML
-    private Label time, seqLength;
+    private Label time, keyError;
     @FXML
     private TextArea lfsr1Res, lfsr0Res, lfsrRes, result;
     private LFSR lfsr;
     private int[] tap0, tap1, tap2;
+    int seqLth, ask = 0;
     String fileName;
-    File file;
+    File file, key, text, out;
     FileWriter fw;
-
+    FileReader fr;
+    BufferedReader br;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -41,6 +41,11 @@ public class Controller implements Initializable {
         if (ifFile.isSelected()) {
             fileName = writeFile.getText();
         }
+
+        if (!seqLength.getText().isEmpty()) {
+            seqLth = Integer.parseInt(seqLength.getText());
+        } else seqLth = 10000;
+
         int[] bytes = new int[]{Integer.parseInt(bytesLfsrMain.getText()), Integer.parseInt(bytesLfsr0.getText()), Integer.parseInt(bytesLfsr1.getText())};
         System.out.println(bytes[0] + " " + bytes[1] + " " + bytes[2]);
         for (int i = 0; i < 3; i++) {
@@ -166,7 +171,7 @@ public class Controller implements Initializable {
         int start, stop;
         if (FullSeq.isSelected()) {
             start = 0;
-            stop = lfsr.getSequenceLength();
+            stop = seqLth;
             System.out.println(stop);
         } else {
             start = getStart();
@@ -236,4 +241,121 @@ public class Controller implements Initializable {
         return start;
     }
 
+    private void WriteToFile(String s) {
+        out = new File(outputFile.getText());
+        fw = null;
+        try {
+            fw = new FileWriter(out);
+            fw.write(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private static String textToBinary(String s){
+        byte[] bytes = s.getBytes();
+        StringBuilder binary = new StringBuilder();
+        for (byte b : bytes)
+        {
+            int val = b;
+            for (int i = 0; i < 8; i++)
+            {
+                binary.append((val & 128) == 0 ? 0 : 1);
+                val <<= 1;
+            }
+        }
+        return binary.toString();
+    }
+    private static String binaryToText(String string){
+        StringBuilder sb = new StringBuilder();
+        char[] chars = string.replaceAll("\\s", "").toCharArray();
+        int [] mapping = {1,2,4,8,16,32,64,128};
+
+        for (int j = 0; j < chars.length; j+=8) {
+            int idx = 0;
+            int sum = 0;
+            for (int i = 7; i>= 0; i--) {
+                if (chars[i+j] == '1') {
+                    sum += mapping[idx];
+                }
+                idx++;
+            }
+            //System.out.println(sum);//debug
+            sb.append(Character.toChars(sum));
+        }
+        return sb.toString();
+    }
+    private String fileContent(File file) {
+        StringBuilder s = new StringBuilder();
+        String line;
+        fr=null;br=null;
+        try {
+            fr = new FileReader(file);
+            br = new BufferedReader(fr);
+            while((line = br.readLine()) != null) {
+                s.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return s.toString();
+        }
+    }
+    public void Cipher() {
+        StringBuilder sb = new StringBuilder();
+        String K = fileContent(new File(keyFile.getText()));
+        String T = fileContent(new File(textFile.getText()));
+        String binText = textToBinary(T);
+        System.out.println(binText);
+        if(K.length()>binText.length()) K = K.substring(0, binText.length());
+        if(keyLength(K.length(), binText.length())){
+            for(int i=0; i<binText.length();){
+                for(int j=0; j<K.length()||i<binText.length(); j++,i++){
+                    sb.append(binText.charAt(i) ^ K.charAt(j));
+                }
+            }
+        System.out.println(binText);
+        WriteToFile(sb.toString());
+        }
+    }
+
+    public void Decipher() {
+        StringBuilder sb = new StringBuilder();
+        String K = fileContent(new File(keyFile.getText()));
+        String binText = fileContent(new File(textFile.getText()));
+        System.out.println(binText);
+        if(K.length()>binText.length()) K =  K.substring(0, binText.length());
+        if(keyLength(K.length(), binText.length())){
+            for(int i=0; i<binText.length();){
+                for(int j=0; j<K.length()||i<binText.length(); j++,i++){
+                    sb.append(binText.charAt(i) ^ K.charAt(j));
+                }
+            }
+            WriteToFile(binaryToText(sb.toString()));
+        }
+    }
+
+    public boolean keyLength(int key, int file) {
+        if (ignore.isSelected()) {
+            ask = 0;
+            return true;
+        } else if (key != file && ask == 0) {
+            keyError.setText("Key length error (mismatch length: key/text), if you want to proceed press the same button again or select checkbox to ignore keylength. If you dont want to proceed generate new key with the same length as text");
+            ask++;
+            return false;
+        } else if (key != file && ask > 0) {
+            return true;
+        } else if (key == file) return true;
+        else return false;
+    }
 }

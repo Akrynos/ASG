@@ -259,10 +259,13 @@ public class LFSR {
      * sequence delimited by the system line separator.
      */
     public String getBitSequence(int start, int stop, boolean bitDirection) {
+        int limit = stop;
+        System.out.println("Limit: " + limit);
         initTimeOut(ACCEPTABLE_RUN_TIME);
-        String tempResult, correction;
-        correction = new String();
-        int s1=0, s0=0;
+        String tempResult;
+        StringBuilder correction;
+        correction = new StringBuilder(new String());
+        int s1 = 0, s0 = 0;
         int subLength, subDiff;
         for (int i = 0; i < start; i++) {
             strobeClock();
@@ -281,15 +284,16 @@ public class LFSR {
             is0SmallerThan1 = false;
         }
         for (int eee = 0; eee < subDiff; eee++) {
-            correction += "0";
+            correction.append("0");
         }
 
-        for (int i = start; i <= stop; i++) {
-
+        for (int i = start; i <= stop || limit > 0; i++) {
+            //System.out.println(limit + " ");
             text.append(i);
             if (i <= 999 && i >= 0) {
                 text.append(" \t ");
-            }if (i > 999) {
+            }
+            if (i > 999) {
                 text.append("\t\t");
             }
 
@@ -316,8 +320,12 @@ public class LFSR {
                         //System.out.println("Length is the same, appending with ^ sign");
                         for (int b = 0; b < subLength; b++) {
                             result.append(subLFSR1.charAt(b) ^ subLFSR0.charAt(b));
+                            limit--;
+                            //System.out.print(limit + "* ");
+                            if (limit <= 0) break;
                         }
                     } else System.out.println("Error, data length mismatch");
+                    if (limit <= 0) break;
                 }
             } else {
                 tempResult = getBitsBackward();
@@ -342,13 +350,19 @@ public class LFSR {
                         //System.out.println("Length is the same, appending with ^ sign");
                         for (int b = 0; b < subLength; b++) {
                             result.append(subLFSR1.charAt(b) ^ subLFSR0.charAt(b));
+                            limit--;
+                            //System.out.print(limit + "- ");
+                            if (limit <= 0) break;
+
                         }
                     } else System.out.println("Error, data length mismatch");
+                    if (limit <= 0) break;
                 }
             }
             text.append(tempResult)
                     .append(System.getProperty("line.separator"));
-            strobeClock();
+            if (limit > 0) strobeClock();
+            else break;
             if (isTimeOut())
                 break;
         }
