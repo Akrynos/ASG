@@ -316,11 +316,11 @@ public class Controller implements Initializable {
         String K = fileContent(new File(keyFile.getText()));
         String T = fileContent(new File(textFile.getText()));
         String binText = textToBinary(T);
-        System.out.println(binText);
+        System.out.println(binText.length());
         if(K.length()>binText.length()) K = K.substring(0, binText.length());
         if(keyLength(K.length(), binText.length())){
-            for(int i=0; i<binText.length();){
-                for(int j=0; j<K.length()||i<binText.length(); j++,i++){
+            for(int i=0; i<binText.length()-1;){
+                for(int j=0; j<K.length()&&i<binText.length(); j++,i++){
                     sb.append(binText.charAt(i) ^ K.charAt(j));
                 }
             }
@@ -337,7 +337,7 @@ public class Controller implements Initializable {
         if(K.length()>binText.length()) K =  K.substring(0, binText.length());
         if(keyLength(K.length(), binText.length())){
             for(int i=0; i<binText.length();){
-                for(int j=0; j<K.length()||i<binText.length(); j++,i++){
+                for(int j=0; j<K.length()&&i<binText.length(); j++,i++){
                     sb.append(binText.charAt(i) ^ K.charAt(j));
                 }
             }
