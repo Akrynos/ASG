@@ -29,7 +29,7 @@ public class Controller implements Initializable {
     FileWriter fw;
     FileReader fr;
     BufferedReader br;
-
+    StringBuilder testData = new StringBuilder();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -364,6 +364,7 @@ public class Controller implements Initializable {
     }
 
     void singleTest(String s) {
+        testData.append("\nSingle bit test\n");
         Integer z = 0, o = 0;
         if (s.length() < 20000) TestError.setText("Key is too short");
         for (int i = 0; i < 20000; i++) {
@@ -373,11 +374,19 @@ public class Controller implements Initializable {
         zeroes.setText(z.toString());
         ones.setText(o.toString());
         if ((z > 9725 && z < 10275) && (o > 9725 && o < 10275))
+        {
             singleTestRes.setText("Passed");
-        else singleTestRes.setText("Failed");
+            testData.append("Passed\n");
+        }
+        else {
+            singleTestRes.setText("Failed");
+            testData.append("Failed\n");
+        }
+        testData.append("Zeroes number: " + z + "\n" + "One number: " + o +"\n");
     }
 
     void seriesTest(String s) {
+
         int[] S = {0, 0, 0, 0, 0, 0, 0};
         Integer s1, s2, s3, s4, s5, s6, tempLen = 0, size = 0;
         int lst = 0, sst = 999;
@@ -409,19 +418,36 @@ public class Controller implements Initializable {
         series14.setText(s4.toString());
         series15.setText(s5.toString());
         series16.setText(s6.toString());
+        testData.append("\nSeries test\n");
         if ((s1 >= 2315 && s1 <= 2685) && (s2 >= 1114 && s2 <= 1368) && (s3 >= 527 && s3 <= 723) && (s4 >= 240 && s4 <= 238) && (s5 >= 103 && s5 <= 209) && (s6 >= 103 && s6 <= 209))
+        {
             seriesTestRes.setText("Passed");
-        else seriesTestRes.setText("Failed");
+            testData.append("Passed\n");
+        }
+        else {
+            seriesTestRes.setText("Failed");
+            testData.append("Failed\n");
+        }
+        testData.append("1\t" + s1 + "\n2\t" + s2 + "\n3\t" + s3 + "\n4\t" + s4 + "\n5\t" + s5 + "\n6\t" + s6 +"\n\n");
     }
 
     void seriesLengthTest(int l, int s) {
         longest.setText(Integer.toString(l));
         shortest.setText(Integer.toString(s));
-        if (l >= 26) longTestRes.setText("Failed");
-        else longTestRes.setText("Passed");
+        testData.append("\nSeries length test\n");
+        if (l >= 26) {
+            longTestRes.setText("Failed");
+            testData.append("Failed\n");
+        }
+        else {
+            longTestRes.setText("Passed");
+            testData.append("Passed\n");
+        }
+        testData.append("Longest series: " + l + "\n" + "Shortest series: " + s +"\n\n");
     }
 
     void pokerTest(String s) {
+        testData.append("\nPoker test\n");
         int[] S = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         long dane=0;
         String temp;
@@ -440,23 +466,49 @@ public class Controller implements Initializable {
         System.out.println(x+" "+dane);
        pokerX.setText(Double.toString(x));
         pokerS.setText(temp);
-        if(x>2.16 && x<46.17) pokerRes.setText("Passed");
-        else pokerRes.setText("Failed");
+        if(x>2.16 && x<46.17) {
+            pokerRes.setText("Passed");
+            testData.append("Passed");
+        }
+        else {
+            pokerRes.setText("Failed");
+            testData.append("Failed");
+        }
+        for(int i=0; i<15; i++){
+            testData.append("\n" + i + "\t" + S[i]);
+        }
+        testData.append("\n\n");
     }
 
     void launchAllTests(String s) {
         singleTest(s);
         seriesTest(s);
         pokerTest(s);
+        out = new File("TestResult.txt");
+        fw = null;
+        try {
+            fw = new FileWriter(out);
+            fw.write(testData.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void testingResult() {
         String key = lfsr.getResult();
+        testData.append("Testing key: " + key + "line.separator" + "\n");
         launchAllTests(key);
     }
 
     public void testingFile() {
         String key = fileContent(new File(testFile.getText()));
+        testData.append("Testing key: " + key + "line.separator" + "\n");
         launchAllTests(key);
     }
 }
