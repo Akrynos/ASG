@@ -14,11 +14,11 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox feedbackType;
     @FXML
-    private TextField tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsrMain, bytesLfsr0, bytesLfsr1, upper, lower, seqLength, keyFile, textFile, outputFile;
+    private TextField testFile, tap10, tap20, tap30, tap40, tap11, tap21, tap31, tap41, tap12, tap22, tap32, tap42, writeFile, bytesLfsrMain, bytesLfsr0, bytesLfsr1, upper, lower, seqLength, keyFile, textFile, outputFile;
     @FXML
     private CheckBox autoTaps, ifFile, FullSeq, ignore;
     @FXML
-    private Label time, keyError;
+    private Label TestError, time, keyError, zeroes, ones, singleTestRes, series11, series12, series13, series14, series15, series16, seriesTestRes, longTestRes, shortest, longest, pokerS, pokerX, pokerRes;
     @FXML
     private TextArea lfsr1Res, lfsr0Res, lfsrRes, result;
     private LFSR lfsr;
@@ -29,6 +29,7 @@ public class Controller implements Initializable {
     FileWriter fw;
     FileReader fr;
     BufferedReader br;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -257,30 +258,30 @@ public class Controller implements Initializable {
             }
         }
     }
-    private static String textToBinary(String s){
+
+    private static String textToBinary(String s) {
         byte[] bytes = s.getBytes();
         StringBuilder binary = new StringBuilder();
-        for (byte b : bytes)
-        {
+        for (byte b : bytes) {
             int val = b;
-            for (int i = 0; i < 8; i++)
-            {
+            for (int i = 0; i < 8; i++) {
                 binary.append((val & 128) == 0 ? 0 : 1);
                 val <<= 1;
             }
         }
         return binary.toString();
     }
-    private static String binaryToText(String string){
+
+    private static String binaryToText(String string) {
         StringBuilder sb = new StringBuilder();
         char[] chars = string.replaceAll("\\s", "").toCharArray();
-        int [] mapping = {1,2,4,8,16,32,64,128};
+        int[] mapping = {1, 2, 4, 8, 16, 32, 64, 128};
 
-        for (int j = 0; j < chars.length; j+=8) {
+        for (int j = 0; j < chars.length; j += 8) {
             int idx = 0;
             int sum = 0;
-            for (int i = 7; i>= 0; i--) {
-                if (chars[i+j] == '1') {
+            for (int i = 7; i >= 0; i--) {
+                if (chars[i + j] == '1') {
                     sum += mapping[idx];
                 }
                 idx++;
@@ -290,14 +291,16 @@ public class Controller implements Initializable {
         }
         return sb.toString();
     }
+
     private String fileContent(File file) {
         StringBuilder s = new StringBuilder();
         String line;
-        fr=null;br=null;
+        fr = null;
+        br = null;
         try {
             fr = new FileReader(file);
             br = new BufferedReader(fr);
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 s.append(line);
             }
         } catch (IOException e) {
@@ -311,21 +314,22 @@ public class Controller implements Initializable {
             return s.toString();
         }
     }
+
     public void Cipher() {
         StringBuilder sb = new StringBuilder();
         String K = fileContent(new File(keyFile.getText()));
         String T = fileContent(new File(textFile.getText()));
         String binText = textToBinary(T);
-        System.out.println(binText.length());
-        if(K.length()>binText.length()) K = K.substring(0, binText.length());
-        if(keyLength(K.length(), binText.length())){
-            for(int i=0; i<binText.length()-1;){
-                for(int j=0; j<K.length()&&i<binText.length(); j++,i++){
+        //System.out.println(binText.length());
+        if (K.length() > binText.length()) K = K.substring(0, binText.length());
+        if (keyLength(K.length(), binText.length())) {
+            for (int i = 0; i < binText.length() - 1; ) {
+                for (int j = 0; j < K.length() && i < binText.length(); j++, i++) {
                     sb.append(binText.charAt(i) ^ K.charAt(j));
                 }
             }
-        System.out.println(binText);
-        WriteToFile(sb.toString());
+            System.out.println(binText);
+            WriteToFile(sb.toString());
         }
     }
 
@@ -333,11 +337,11 @@ public class Controller implements Initializable {
         StringBuilder sb = new StringBuilder();
         String K = fileContent(new File(keyFile.getText()));
         String binText = fileContent(new File(textFile.getText()));
-        System.out.println(binText);
-        if(K.length()>binText.length()) K =  K.substring(0, binText.length());
-        if(keyLength(K.length(), binText.length())){
-            for(int i=0; i<binText.length();){
-                for(int j=0; j<K.length()&&i<binText.length(); j++,i++){
+        //System.out.println(binText);
+        if (K.length() > binText.length()) K = K.substring(0, binText.length());
+        if (keyLength(K.length(), binText.length())) {
+            for (int i = 0; i < binText.length(); ) {
+                for (int j = 0; j < K.length() && i < binText.length(); j++, i++) {
                     sb.append(binText.charAt(i) ^ K.charAt(j));
                 }
             }
@@ -357,5 +361,102 @@ public class Controller implements Initializable {
             return true;
         } else if (key == file) return true;
         else return false;
+    }
+
+    void singleTest(String s) {
+        Integer z = 0, o = 0;
+        if (s.length() < 20000) TestError.setText("Key is too short");
+        for (int i = 0; i < 20000; i++) {
+            if (s.charAt(i) == '0') z++;
+            else o++;
+        }
+        zeroes.setText(z.toString());
+        ones.setText(o.toString());
+        if ((z > 9725 && z < 10275) && (o > 9725 && o < 10275))
+            singleTestRes.setText("Passed");
+        else singleTestRes.setText("Failed");
+    }
+
+    void seriesTest(String s) {
+        int[] S = {0, 0, 0, 0, 0, 0, 0};
+        Integer s1, s2, s3, s4, s5, s6, tempLen = 0, size = 0;
+        int lst = 0, sst = 999;
+        for (int i = 0; i < 19999; i++) {
+            if (s.charAt(i) == s.charAt(i + 1)) tempLen++;
+            else {
+                tempLen++;
+                if (sst > tempLen) sst = tempLen;
+                if (lst < tempLen) lst = tempLen;
+                size += tempLen;
+                if (tempLen >= 6) S[5]++;
+                else S[tempLen - 1]++;
+                //System.out.print(tempLen + " ");
+                tempLen = 0;
+            }
+        }
+        seriesLengthTest(lst, sst);
+       // System.out.println(size);
+        s1 = S[0];
+        s2 = S[1];
+        s3 = S[2];
+        s4 = S[3];
+        s5 = S[4];
+        s6 = S[5];
+        //for (int i = 0; i <= 5; i++) System.out.println(Integer.toString(S[i]));
+        series11.setText(s1.toString());
+        series12.setText(s2.toString());
+        series13.setText(s3.toString());
+        series14.setText(s4.toString());
+        series15.setText(s5.toString());
+        series16.setText(s6.toString());
+        if ((s1 >= 2315 && s1 <= 2685) && (s2 >= 1114 && s2 <= 1368) && (s3 >= 527 && s3 <= 723) && (s4 >= 240 && s4 <= 238) && (s5 >= 103 && s5 <= 209) && (s6 >= 103 && s6 <= 209))
+            seriesTestRes.setText("Passed");
+        else seriesTestRes.setText("Failed");
+    }
+
+    void seriesLengthTest(int l, int s) {
+        longest.setText(Integer.toString(l));
+        shortest.setText(Integer.toString(s));
+        if (l >= 26) longTestRes.setText("Failed");
+        else longTestRes.setText("Passed");
+    }
+
+    void pokerTest(String s) {
+        int[] S = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        long dane=0;
+        String temp;
+        for (int i = 0; i < 5000; i += 4) {
+            temp = s.substring(i, i + 4);
+            //System.out.println(temp + " " + Integer.parseInt(temp, 2));
+           S[Integer.parseInt(temp, 2)]++;
+        }
+        temp="";
+       for(int i=0; i<15; i++){
+           dane+=S[i]*S[i]-5000;
+           temp+=i+": "+S[i]+" | ";
+           if(i==15) temp+=i+": "+S[i];
+       }
+       double x = (16.00/5000.00)*dane;
+        System.out.println(x+" "+dane);
+       pokerX.setText(Double.toString(x));
+        pokerS.setText(temp);
+        if(x>2.16 && x<46.17) pokerRes.setText("Passed");
+        else pokerRes.setText("Failed");
+    }
+
+    void launchAllTests(String s) {
+        singleTest(s);
+        seriesTest(s);
+        pokerTest(s);
+    }
+
+    public void testingResult() {
+        String key = lfsr.getResult();
+        launchAllTests(key);
+    }
+
+    public void testingFile() {
+        String key = fileContent(new File(testFile.getText()));
+        launchAllTests(key);
     }
 }

@@ -58,7 +58,7 @@
                         <Label text="Feedback Type" />
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <ChoiceBox fx:id="feedbackType" layoutX="1.0" layoutY="6.0" value="ManyToOne">
+                              <ChoiceBox fx:id="feedbackType" layoutX="1.0" layoutY="6.0" value="OneToMany">
                                   <items>
                                       <FXCollections fx:factory="observableArrayList">
                                           <String fx:value="OneToMany" />
@@ -144,7 +144,7 @@
                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="66.0" text="Length" />
-                                    <TextField fx:id="seqLength" maxWidth="111.0" minWidth="50.0" prefHeight="25.0" prefWidth="107.0" />
+                                    <TextField fx:id="seqLength" maxWidth="111.0" minWidth="50.0" prefHeight="25.0" prefWidth="107.0" text="20000" />
                                  </children>
                               </HBox>
                            </children>
@@ -228,7 +228,7 @@
                            </children></AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="Program pt.2">
+                  <Tab text="Files">
                       <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                               <children>
@@ -241,8 +241,8 @@
                                       <TextField fx:id="outputFile" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="30.0" prefWidth="30.0" text="output.txt" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                                       <CheckBox fx:id="ignore" alignment="CENTER" minHeight="30.0" minWidth="120.0" selected="true" text="Ignore key length" wrapText="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
                                       <Label fx:id="keyError" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="41.0" prefWidth="120.0" text="OK" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
-                                      <Button fx:id="Cipher" alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Cipher" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" onAction="#Cipher"/>
-                                      <Button fx:id="Decipher" alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Decipher" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" onAction="#Decipher"/>
+                                      <Button fx:id="Cipher" alignment="CENTER" minHeight="30.0" minWidth="120.0" onAction="#Cipher" text="Cipher" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                                      <Button fx:id="Decipher" alignment="CENTER" minHeight="30.0" minWidth="120.0" onAction="#Decipher" text="Decipher" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
                                  <columnConstraints>
                                     <ColumnConstraints />
                                     <ColumnConstraints />
@@ -258,6 +258,269 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
                                   </GridPane>
+                              </children></AnchorPane>
+                      </content>
+                  </Tab>
+                  <Tab text="Testing">
+                      <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                              <children>
+                                  <GridPane alignment="CENTER" layoutX="13.0" layoutY="14.0" minHeight="114.0" minWidth="258.0" prefHeight="114.0" prefWidth="258.0">
+                                      <Label alignment="CENTER" minHeight="30.0" minWidth="120.0" text="Key File" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="LEFT" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                                      <TextField fx:id="testFile" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="30.0" prefWidth="30.0" text="key.txt" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="CENTER" />
+                                      <Label fx:id="TestError" alignment="CENTER" minHeight="30.0" minWidth="120.0" prefHeight="41.0" prefWidth="120.0" text="OK" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                                      <Button fx:id="FileTest" alignment="CENTER" minHeight="30.0" minWidth="120.0" onAction="#testingFile" text="Test from file" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                                      <Button fx:id="ResultTest" alignment="CENTER" minHeight="30.0" minWidth="120.0" onAction="#testingResult" text="Test from result" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                                      <columnConstraints>
+                                          <ColumnConstraints />
+                                          <ColumnConstraints />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                          <RowConstraints />
+                                    <RowConstraints />
+                                      </rowConstraints>
+                                      <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                      </padding>
+                                  </GridPane>
+                              <TabPane layoutX="6.0" layoutY="128.0" prefHeight="247.0" prefWidth="273.0" tabClosingPolicy="UNAVAILABLE">
+                                <tabs>
+                                  <Tab text="Single bit">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane alignment="CENTER" layoutX="37.0" layoutY="18.0" prefHeight="183.0" prefWidth="200.0">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <Label text="Zeroes">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Ones" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Result" GridPane.rowIndex="2">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="zeroes" text="0" GridPane.columnIndex="1">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="ones" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="singleTestRes" text="Unknown" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </GridPane>
+                                             </children></AnchorPane>
+                                    </content>
+                                  </Tab>
+                                  <Tab text="Series">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane layoutX="26.0" layoutY="18.0" prefHeight="183.0" prefWidth="222.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <Label text="Length of series">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="seriesTestRes" text="Unknown" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Number of series" GridPane.columnIndex="1">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Result" GridPane.rowIndex="7">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="6 and above" GridPane.rowIndex="6">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="5" GridPane.rowIndex="5">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="4" GridPane.rowIndex="4">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="3" GridPane.rowIndex="3">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="2" GridPane.rowIndex="2">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="1" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="series11" prefHeight="17.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="series12" prefHeight="17.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="series13" prefHeight="17.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="series14" prefHeight="17.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="series15" prefHeight="17.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="series16" prefHeight="17.0" prefWidth="50.0" text="1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                                                         <font>
+                                                            <Font size="13.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </GridPane>
+                                             </children></AnchorPane>
+                                    </content>
+                                </Tab>
+                                    <Tab text="Long series">
+                                        <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane alignment="CENTER" layoutX="16.0" layoutY="18.0" prefHeight="183.0" prefWidth="241.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <Label text="Longest series">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Shortest series" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label text="Result" GridPane.rowIndex="2">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="longest" text="0" GridPane.columnIndex="1">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="shortest" text="1" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <Label fx:id="longTestRes" text="Unknown" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                         <font>
+                                                            <Font size="16.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </GridPane> 
+                                             </children></AnchorPane>
+                                        </content>
+                                    </Tab>
+                                    <Tab text="Poker test">
+                                        <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <GridPane alignment="CENTER" layoutX="25.0" layoutY="18.0" prefHeight="183.0" prefWidth="224.0">
+                                                   <columnConstraints>
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="30.0" />
+                                                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="120.0" prefWidth="150.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <children>
+                                                      <Label text="S(i)" />
+                                                      <Label text="X " GridPane.rowIndex="1" />
+                                                      <Label text="Result" GridPane.rowIndex="2" />
+                                                      <Label fx:id="pokerS" text="[]" wrapText="true" GridPane.columnIndex="1" />
+                                                      <Label fx:id="pokerX" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <Label fx:id="pokerRes" text="Unknown" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                   </children>
+                                                </GridPane>
+                                             </children></AnchorPane>
+                                        </content>
+                                    </Tab>
+                                </tabs>
+                              </TabPane>
                               </children></AnchorPane>
                       </content>
                   </Tab>

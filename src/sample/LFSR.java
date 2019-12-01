@@ -259,6 +259,9 @@ public class LFSR {
      * sequence delimited by the system line separator.
      */
     public String getBitSequence(int start, int stop, boolean bitDirection) {
+        strobeClock();
+        sub0.strobeClock();
+        sub1.strobeClock();
         int limit = stop;
         System.out.println("Limit: " + limit);
         initTimeOut(ACCEPTABLE_RUN_TIME);

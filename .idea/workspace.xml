@@ -10,8 +10,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ASG/sample/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ASG/sample/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/LFSR.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/LFSR.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sample/sample.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/sample/sample.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/write.txt" beforeDir="false" afterPath="$PROJECT_DIR$/write.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -229,6 +231,7 @@
       <workItem from="1572796442109" duration="3562000" />
       <workItem from="1574607094748" duration="13904000" />
       <workItem from="1574666691554" duration="2902000" />
+      <workItem from="1575203443277" duration="12560000" />
     </task>
     <servers />
   </component>
