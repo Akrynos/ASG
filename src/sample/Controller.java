@@ -477,6 +477,7 @@ public class Controller implements Initializable {
         for(int i=0; i<15; i++){
             testData.append("\n" + i + "\t" + S[i]);
         }
+        testData.append("\nX = "+Double.toString(x));
         testData.append("\n\n");
     }
 
